@@ -20,6 +20,7 @@
         {
             return ball.Position.X == Position.X && ball.Position.Y == Position.Y;
         }
+        public int MyProperty { get; set; }
     }
 
 }

@@ -9,5 +9,4 @@
         public Direction Direction { get; set; }
         public CommandType Command { get; set; }
     }
-
 }

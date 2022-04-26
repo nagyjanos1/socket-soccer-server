@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "Pattern.Exam.WebAPI": {
+    "Socket.Soccer.WebAPI": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

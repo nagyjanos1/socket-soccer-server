@@ -9,10 +9,37 @@ namespace Socket.Soccer.WebAPI.Game
         private const string STATE = "state";
 
         private readonly IDistributedCache _cache;
+        private readonly IClientStore _clientStore;
 
-        public GameHub(IDistributedCache cache)
+        public GameHub(IDistributedCache cache, IClientStore clientStore)
         {
             _cache = cache;
+            _clientStore = clientStore;
+        }
+
+        public override async Task OnConnectedAsync()
+        {
+            _clientStore.Add(Context.ConnectionId, new List<Guid>());
+            await base.OnConnectedAsync();
+        }
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            _clientStore.Remove(Context.ConnectionId);
+            await base.OnDisconnectedAsync(exception);
+        }
+
+
+        /// <summary>
+        /// Csatalkozás után regisztráljuk a játékosokat
+        /// </summary>
+        /// <param name="playerIds"></param>
+        /// <returns></returns>
+        public async Task InitPlayers(List<Guid> playerIds)
+        {
+            _clientStore.AddPlayers(Context.ConnectionId, playerIds);
+
+            await Clients.User(Context.ConnectionId).ReceiveInitResponse("Regisztrálva.");
         }
 
         /// <summary>
@@ -31,6 +58,7 @@ namespace Socket.Soccer.WebAPI.Game
 
             await Clients.All.ReceiveMessage(calculatedGameState);
         }
+
 
         /// <summary>
         /// Kiszámoljuk, hol a labda és hol a játékos
@@ -63,14 +91,14 @@ namespace Socket.Soccer.WebAPI.Game
                         }
                         break;
 
-                    // TODO: Passzolás
+                        // TODO: Passzolás
                 }
             }
 
             return gameState;
         }
 
-        private static (double x,double y) DeterminePosition(Position position, Direction direction)
+        private static (double x, double y) DeterminePosition(Position position, Direction direction)
         {
             return direction switch
             {

@@ -8,11 +8,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSignalR();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<IClientStore, ClientStore>();
+
 var app = builder.Build();
 
 var webSocketOptions = new WebSocketOptions
 {
-    KeepAliveInterval = TimeSpan.FromMinutes(2)
+    KeepAliveInterval = TimeSpan.FromSeconds(1),
 };
 
 // Configure the HTTP request pipeline.
