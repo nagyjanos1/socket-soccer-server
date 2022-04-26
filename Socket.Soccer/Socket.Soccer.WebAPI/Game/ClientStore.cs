@@ -4,7 +4,7 @@
     {
         public List<PlayerClient> PlayerClients { get; init; } = new List<PlayerClient>();
 
-        public void Add(Guid playerClientId, List<Guid> playerIds)
+        public void Add(string playerClientId, List<Guid> playerIds)
         {
             if (PlayerClients.Count >= 2)
                 throw new Exception("Nem léphetbe több játékos!");
@@ -18,12 +18,12 @@
             });
         }
 
-        public PlayerClient? Get(Guid playerClientId)
+        public PlayerClient? Get(string playerClientId)
         {
             return PlayerClients.FirstOrDefault(x => x.ClientId == playerClientId);
         }
 
-        public bool Check(Guid playerClientId, Guid playerId)
+        public bool Check(string playerClientId, Guid playerId)
         {
             var client = PlayerClients.FirstOrDefault(x => x.ClientId == playerClientId);
             if (client == null)
@@ -32,11 +32,22 @@
             return client.PlayerIds.Contains(playerId);
         }
 
-        public void Remove(Guid playerClientId)
+        public void Remove(string playerClientId)
         {
-            var removable = PlayerClients.FirstOrDefault(x => x.ClientId == playerClientId);
-            if (removable != null)
-                PlayerClients.Remove(removable);
+            var client = PlayerClients.FirstOrDefault(x => x.ClientId == playerClientId);
+            if (client == null)
+                throw new Exception("Nincs ilyen kliens regisztrálva.");
+
+            PlayerClients.Remove(client);
+        }
+
+        public void AddPlayers(string playerClientId, List<Guid> playerIds)
+        {
+            var client = PlayerClients.FirstOrDefault(x => x.ClientId == playerClientId);
+            if (client == null)
+                throw new Exception("Nincs ilyen kliens regisztrálva.");
+
+            client.PlayerIds = playerIds;
         }
     }
 }

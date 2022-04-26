@@ -29,7 +29,6 @@ namespace Socket.Soccer.WebAPI.Game
             await base.OnDisconnectedAsync(exception);
         }
 
-
         /// <summary>
         /// Csatalkozás után regisztráljuk a játékosokat
         /// </summary>
