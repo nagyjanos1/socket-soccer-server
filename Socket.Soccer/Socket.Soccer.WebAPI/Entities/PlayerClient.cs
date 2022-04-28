@@ -1,4 +1,4 @@
-﻿namespace Socket.Soccer.WebAPI.Game
+﻿namespace Socket.Soccer.WebAPI.Entities
 {
     public class PlayerClient
     {

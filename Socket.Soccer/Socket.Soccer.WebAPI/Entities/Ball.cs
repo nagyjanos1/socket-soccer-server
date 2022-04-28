@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNet.SignalR.Hubs;
-
-namespace Socket.Soccer.WebAPI.Game
+﻿namespace Socket.Soccer.WebAPI.Entities
 {
     public class Ball
     {
@@ -27,10 +25,10 @@ namespace Socket.Soccer.WebAPI.Game
         {
             return direction switch
             {
-                Direction.North => (position.X, position.Y + (position.Direction * kickStrength)),
-                Direction.Easth => (position.X + (position.Direction * kickStrength), position.Y),
-                Direction.South => (position.X, position.Y + (position.Direction * kickStrength)),
-                Direction.West => (position.X + (position.Direction * kickStrength), position.Y),
+                Direction.North => (position.X, position.Y + position.Direction * kickStrength),
+                Direction.Easth => (position.X + position.Direction * kickStrength, position.Y),
+                Direction.South => (position.X, position.Y + position.Direction * kickStrength),
+                Direction.West => (position.X + position.Direction * kickStrength, position.Y),
                 _ => (5, 10),
             };
         }

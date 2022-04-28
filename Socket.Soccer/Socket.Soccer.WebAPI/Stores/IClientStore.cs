@@ -1,4 +1,6 @@
-﻿namespace Socket.Soccer.WebAPI.Game
+﻿using Socket.Soccer.WebAPI.Entities;
+
+namespace Socket.Soccer.WebAPI.Stores
 {
     public interface IClientStore
     {

@@ -1,11 +1,11 @@
-﻿namespace Socket.Soccer.WebAPI.Game
+﻿namespace Socket.Soccer.WebAPI.Entities
 {
     public enum CommandType
     {
         /// <summary>
         /// Mozgás
         /// </summary>
-        Move, 
+        Move,
 
         /// <summary>
         /// Rúgás

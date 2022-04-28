@@ -1,6 +1,8 @@
-﻿namespace Socket.Soccer.WebAPI.Game
+﻿using Socket.Soccer.WebAPI.Entities;
+
+namespace Socket.Soccer.WebAPI.Stores
 {
-    public class ClientStore: IClientStore
+    public class ClientStore : IClientStore
     {
         public List<PlayerClient> PlayerClients { get; init; } = new List<PlayerClient>();
 

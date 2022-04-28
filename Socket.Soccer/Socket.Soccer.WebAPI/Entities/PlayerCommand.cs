@@ -1,4 +1,4 @@
-﻿namespace Socket.Soccer.WebAPI.Game
+﻿namespace Socket.Soccer.WebAPI.Entities
 {
     /// <summary>
     /// Egy darab játékos műveletét reprezentálja
