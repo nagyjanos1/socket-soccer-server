@@ -7,12 +7,13 @@
     {
         public Guid Id { get; set; }
         public Position Position { get; set; }
+        public TeamType Team { get; set; }
         public int KickStrength
         {
             get
             {
                 // Ezt lehetne randomizálni
-                return 3;
+                return 2;
             }
         }
 

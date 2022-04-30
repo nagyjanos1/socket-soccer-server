@@ -7,6 +7,15 @@
         /// </summary>
         public Position Position { get; set; }
 
+        public Ball()
+        {
+            Position = new Position
+            {
+                X = 0,
+                Y = 0
+            };
+        }
+
         /// <summary>
         /// A játékos iránya (merre néz) mondja meg mi lesz a következő helyzete a labdának
         /// </summary>

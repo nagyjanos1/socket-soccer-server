@@ -1,21 +1,19 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Caching.Distributed;
-using Newtonsoft.Json;
-using Socket.Soccer.WebAPI.Entities;
 using Socket.Soccer.WebAPI.Hubs;
+using Socket.Soccer.WebAPI.Stores;
 
 namespace Socket.Soccer.WebAPI.Background
 {
     internal class ScopedProcessingService : IScopedProcessingService
     {
-        private readonly IDistributedCache _cache;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IHubContext<GameHub> _hubContext;
+        private readonly IGameStore _gameStore;
         private readonly ILogger _logger;
 
-        public ScopedProcessingService(IDistributedCache cache, IServiceProvider serviceProvider, ILogger<ScopedProcessingService> logger)
+        public ScopedProcessingService(IHubContext<GameHub> hubContext, IGameStore gameStore, ILogger<ScopedProcessingService> logger)
         {
-            _cache = cache;
-            _serviceProvider = serviceProvider;
+            _hubContext = hubContext;
+            _gameStore = gameStore;
             _logger = logger;
         }
 
@@ -25,18 +23,25 @@ namespace Socket.Soccer.WebAPI.Background
             {
                 try
                 {
-                    using var scope = _serviceProvider.CreateScope();
-                    var hubContext = scope.ServiceProvider.GetService<IHubContext<GameHub>>();
+                    var game = await _gameStore.GetOrCreateGame();
 
-                    var gamestateJson = _cache.GetString(nameof(GameState));
-                    if (string.IsNullOrEmpty(gamestateJson)) {
-                        await Task.Delay(1000, stoppingToken);
-                        continue;
+                    if (game.State.IsGoal != null || game.State.IsBallOut)
+                    {
+                        game.ResetState();
                     }
-
-                    var gamestate = JsonConvert.DeserializeObject<GameState>(gamestateJson);
                     
-                    await hubContext.Clients.All.SendAsync(GameHubHelpers.GET_GAMESTATE, gamestate).ConfigureAwait(false);
+                    await _hubContext.Clients.All.SendAsync(
+                            GameHubHelpers.GET_GAMESTATE, 
+                            new {
+                                game.State.HomeScores,
+                                game.State.AwayScores,
+                                game.State.IsGoal,
+                                game.State.IsBallOut,
+                                ball = game.Ball,
+                                players = game.Players
+                            }, 
+                            cancellationToken: stoppingToken)
+                        .ConfigureAwait(false);
 
                     _logger.LogInformation("Sent a gamestate message to all.");
 

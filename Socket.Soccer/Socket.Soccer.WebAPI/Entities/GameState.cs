@@ -1,13 +1,11 @@
 ﻿namespace Socket.Soccer.WebAPI.Entities
 {
-
-    /// <summary>
-    /// A játék elemeit és állapotát tartalmazza
-    /// </summary>
     public class GameState
     {
-        public Ball Ball { get; set; }
-        public List<Player> Players { get; set; } = new List<Player>(22);
+        public int HomeScores { get; set; } = 0;
+        public int AwayScores { get; set; } = 0;
+        public TeamType? IsGoal { get; set; } = null;
+        public bool IsBallOut { get; set; } = false;
     }
 
 }

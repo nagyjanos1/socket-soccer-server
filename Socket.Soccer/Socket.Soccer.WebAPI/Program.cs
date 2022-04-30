@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http.Connections;
 using Socket.Soccer.WebAPI.Background;
+using Socket.Soccer.WebAPI.Game;
 using Socket.Soccer.WebAPI.Hubs;
 using Socket.Soccer.WebAPI.Stores;
 
@@ -7,8 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddSingleton<IClientStore, ClientStore>();
+builder.Services.AddSingleton<IGameStore, GameStateStore>();
+builder.Services.AddSingleton<IGameplay, Gameplay>();
+
 builder.Services.AddScoped<IScopedProcessingService, ScopedProcessingService>();
 builder.Services.AddHostedService<ScopedProcessingServiceHostedService>();
+
 builder.Services.AddDistributedMemoryCache(options =>
 {
     options.ExpirationScanFrequency = TimeSpan.FromSeconds(30);

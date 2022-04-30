@@ -4,6 +4,6 @@
     {
         public string ClientId { get; set; }
         public List<Guid> PlayerIds { get; set; }
-        public bool IsHome { get; set; }
+        public TeamType IsHome { get; set; }
     }
 }
