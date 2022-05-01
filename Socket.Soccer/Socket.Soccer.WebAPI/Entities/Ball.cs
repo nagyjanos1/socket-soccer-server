@@ -9,11 +9,7 @@
 
         public Ball()
         {
-            Position = new Position
-            {
-                X = 0,
-                Y = 0
-            };
+            Position = new Position(0, 0);
         }
 
         /// <summary>
@@ -30,7 +26,7 @@
 
         }
 
-        private static (double x, double y) DeterminePosition(Position position, Direction direction, int kickStrength)
+        private static (int x, int y) DeterminePosition(Position position, Direction direction, int kickStrength)
         {
             return direction switch
             {

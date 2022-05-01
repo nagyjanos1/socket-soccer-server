@@ -4,7 +4,7 @@
     {
         public int HomeScores { get; set; } = 0;
         public int AwayScores { get; set; } = 0;
-        public TeamType? IsGoal { get; set; } = null;
+        public Team? IsGoal { get; set; } = null;
         public bool IsBallOut { get; set; } = false;
     }
 

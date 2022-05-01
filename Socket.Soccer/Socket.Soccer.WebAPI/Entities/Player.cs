@@ -7,7 +7,7 @@
     {
         public Guid Id { get; set; }
         public Position Position { get; set; }
-        public TeamType Team { get; set; }
+        public Team Team { get; set; }
         public int KickStrength
         {
             get

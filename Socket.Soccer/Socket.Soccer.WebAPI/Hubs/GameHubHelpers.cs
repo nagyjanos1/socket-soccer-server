@@ -4,5 +4,6 @@
     {
         public const string GET_GAMESTATE = "getGameState";
         public const string PLAYERS_INITED = "playersInited";
+        public const string SERVER_WAS_RESET = "serverWasReset";
     }
 }

@@ -7,10 +7,10 @@
         public Position EndPoint { get; private set; }
         public FootballGoal() => Length = 4;
 
-        public FootballGoal Create(TeamType teamType)
+        public FootballGoal Create(Team teamType)
         {
             var footballGoal = this;
-            if (teamType == TeamType.Home)
+            if (teamType == Team.Home)
             {
                 StartPoint = new Position(5, 3);
                 EndPoint = new Position(5, 7);

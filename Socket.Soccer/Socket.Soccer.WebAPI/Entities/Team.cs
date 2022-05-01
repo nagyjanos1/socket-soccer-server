@@ -1,6 +1,6 @@
 ﻿namespace Socket.Soccer.WebAPI.Entities
 {
-    public enum TeamType
+    public enum Team
     {
         Home,
         Away

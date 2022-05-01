@@ -29,8 +29,8 @@
             LongSide = 20;
             ShortSide = 10.0;
 
-            Home = new FootballGoal().Create(TeamType.Home);
-            Away = new FootballGoal().Create(TeamType.Away);
+            Home = new FootballGoal().Create(Team.Home);
+            Away = new FootballGoal().Create(Team.Away);
         }
 
         public bool IsBallOut(Ball ball)
@@ -41,17 +41,17 @@
                 || ball.Position.Y + HeightOffset < 0;
         }
 
-        public bool IsGoal(Ball ball, out TeamType? team)
+        public bool IsGoal(Ball ball, out Team? team)
         {
             if (IsGoal(ball, Home))
             {
-                team = TeamType.Home;
+                team = Team.Home;
                 return true;
             }
 
             if (IsGoal(ball, Away))
             {
-                team = TeamType.Away;
+                team = Team.Away;
                 return true;
             }
 

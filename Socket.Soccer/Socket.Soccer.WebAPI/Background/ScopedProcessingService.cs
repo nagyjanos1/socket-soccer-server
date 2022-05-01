@@ -29,17 +29,18 @@ namespace Socket.Soccer.WebAPI.Background
                     {
                         game.ResetState();
                     }
-                    
+
                     await _hubContext.Clients.All.SendAsync(
-                            GameHubHelpers.GET_GAMESTATE, 
-                            new {
+                            GameHubHelpers.GET_GAMESTATE,
+                            new
+                            {
                                 game.State.HomeScores,
                                 game.State.AwayScores,
                                 game.State.IsGoal,
                                 game.State.IsBallOut,
                                 ball = game.Ball,
                                 players = game.Players
-                            }, 
+                            },
                             cancellationToken: stoppingToken)
                         .ConfigureAwait(false);
 
@@ -47,10 +48,10 @@ namespace Socket.Soccer.WebAPI.Background
 
                     await Task.Delay(1000, stoppingToken);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.LogError(ex.Message);
-                }                
+                }
             }
         }
     }

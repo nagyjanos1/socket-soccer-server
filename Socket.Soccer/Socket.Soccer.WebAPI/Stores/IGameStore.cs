@@ -6,5 +6,6 @@ namespace Socket.Soccer.WebAPI.Stores
     {
         Task<Entities.Game> GetOrCreateGame();
         Task SaveGame(Entities.Game game);
+        Task ResetGame();
     }
 }

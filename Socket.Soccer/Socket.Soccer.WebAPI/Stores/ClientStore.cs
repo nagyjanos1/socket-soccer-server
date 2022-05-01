@@ -13,7 +13,7 @@ namespace Socket.Soccer.WebAPI.Stores
             _cache = cache;
         }
 
-        public async Task Add(string playerClientId, List<Guid> playerIds)
+        public async Task<Team> Add(string playerClientId, List<Guid> playerIds)
         {
             var playerClients = await GetOrCreatePlayersList();
 
@@ -21,14 +21,17 @@ namespace Socket.Soccer.WebAPI.Stores
                 throw new Exception("Nem léphetbe több játékos!");
             if (playerClients.Any(x => x.ClientId == playerClientId))
                 throw new Exception("Ezzel az azonosítóval már regisztrált egy játékos.");
-            playerClients.Add(new PlayerClient
+            var client = new PlayerClient
             {
                 ClientId = playerClientId,
                 PlayerIds = playerIds,
-                IsHome = !playerClients.Any() ? TeamType.Home : TeamType.Away,
-            });
+                Team = !playerClients.Any() ? Team.Home : Team.Away,
+            };
+            playerClients.Add(client);
 
             await SavePlayers(playerClients);
+
+            return client.Team;
         }
 
         public async Task<PlayerClient?> Get(string playerClientId)
@@ -94,6 +97,11 @@ namespace Socket.Soccer.WebAPI.Stores
         private async Task SavePlayers(List<PlayerClient> playersIds)
         {
             await _cache.SetStringAsync(nameof(List<PlayerClient>), JsonConvert.SerializeObject(playersIds));
+        }
+
+        public async Task Reset()
+        {
+            await _cache.RemoveAsync(nameof(List<PlayerClient>));
         }
     }
 }

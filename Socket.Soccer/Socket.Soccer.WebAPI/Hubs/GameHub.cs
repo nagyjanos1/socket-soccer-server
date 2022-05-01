@@ -15,10 +15,11 @@ namespace Socket.Soccer.WebAPI.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            await _gameplay.RegisterClient(Context.ConnectionId);
-
-            await Clients.Caller.SendAsync("OnConnectedAsync", "Client was registered.");
+            var team = await _gameplay.RegisterClient(Context.ConnectionId);
+                       
             await base.OnConnectedAsync();
+
+            await Clients.Caller.SendAsync("OnConnectedAsync", team);
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
@@ -52,5 +53,11 @@ namespace Socket.Soccer.WebAPI.Hubs
 
             await Clients.All.SendAsync(GameHubHelpers.GET_GAMESTATE, gameState);
         }       
+
+        public async Task ResetServer()
+        {
+            await _gameplay.ResetGameplay();
+            await Clients.All.SendAsync(GameHubHelpers.SERVER_WAS_RESET, "Game was reset.");
+        }
     }
 }

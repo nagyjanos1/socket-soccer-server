@@ -16,19 +16,27 @@ namespace Socket.Soccer.WebAPI.Game
             _logger = logger;
         }
 
-        public async Task RegisterClient(string clientId)
+        public async Task<Team> RegisterClient(string clientId)
         {
-            await _clientStore.Add(clientId, new List<Guid>());
+            var team = await _clientStore.Add(clientId, new List<Guid>());
             await InitGameState();
+            return team;
         }
 
         public async Task UnregisterClient(string clientId)
         {
             await _clientStore.Remove(clientId);
         }
-               
+
+        public async Task ResetGameplay()
+        {
+            await _clientStore.Reset();
+            await _gameStore.ResetGame();
+        }
+
         public async Task<Entities.Game> InitPlayers(string clientId, List<Guid> playerIds)
         {
+            var team = await _clientStore.Get(clientId);
             await _clientStore.AddPlayers(clientId, playerIds);
 
             var gameState = await _gameStore.GetOrCreateGame();
@@ -42,7 +50,8 @@ namespace Socket.Soccer.WebAPI.Game
                 gameState.Players.Add(new Player
                 {
                     Id = playerId,
-                    Position = new Position(0, 0)
+                    Position = new Position(team?.Team == Team.Home ? 1 : -1, 0, team?.Team == Team.Home ? 1 : -1),
+                    Team = team?.Team ?? Team.Home
                 });
             }
 
@@ -100,11 +109,11 @@ namespace Socket.Soccer.WebAPI.Game
                                 {
                                     game.State.IsGoal = team;
 
-                                    if (team == TeamType.Home)
+                                    if (team == Team.Home)
                                     {
                                         game.State.HomeScores++;                                        
                                     } 
-                                    if (team == TeamType.Away)
+                                    if (team == Team.Away)
                                     {
                                         game.State.AwayScores++;
                                     }                               
@@ -132,7 +141,7 @@ namespace Socket.Soccer.WebAPI.Game
             return game;
         }
 
-        private static (double x, double y) DeterminePosition(Position position, Direction direction)
+        private static (int x, int y) DeterminePosition(Position position, Direction direction)
         {
             return direction switch
             {

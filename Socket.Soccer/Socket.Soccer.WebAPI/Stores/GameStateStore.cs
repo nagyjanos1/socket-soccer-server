@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
-using Socket.Soccer.WebAPI.Entities;
 
 namespace Socket.Soccer.WebAPI.Stores
 {
@@ -20,7 +19,7 @@ namespace Socket.Soccer.WebAPI.Stores
             if (string.IsNullOrWhiteSpace(state))
             {
                 gameState = new Entities.Game();
-                await _cache.SetStringAsync(nameof(Entities.Game), JsonConvert.SerializeObject(gameState));
+                await SaveGame(gameState);
             }
             else
             {
@@ -37,6 +36,12 @@ namespace Socket.Soccer.WebAPI.Stores
         {
             // Elmentjük az állást
             await _cache.SetStringAsync(nameof(Entities.Game), JsonConvert.SerializeObject(gameState));
+        }
+
+        public async Task ResetGame()
+        {
+            var gameState = new Entities.Game();
+            await SaveGame(gameState);
         }
     }
 }
