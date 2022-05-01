@@ -2,7 +2,7 @@
 {
     public class Position
     {
-        private int _direction = -1;
+        private int _direction = 1;
         public int Direction
         {
             get

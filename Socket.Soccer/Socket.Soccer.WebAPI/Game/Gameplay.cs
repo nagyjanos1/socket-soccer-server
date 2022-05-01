@@ -48,11 +48,12 @@ namespace Socket.Soccer.WebAPI.Game
             foreach (var playerId in playerIds)
             {
                 var direction = team?.Team == Team.Home ? 1 : -1;
-                var starPosX = team?.Team == Team.Home ? 1 : -1;
+                var starPosX = team?.Team == Team.Home ? 12 : 14;
+                var starPosY = team?.Team == Team.Home ? 7 :9;
                 gameState.Players.Add(new Player
                 {
                     Id = playerId,
-                    Position = new Position(starPosX, 0, direction),
+                    Position = new Position(starPosX, starPosY, direction),
                     Team = team?.Team ?? Team.Home
                 });
             }
@@ -62,14 +63,14 @@ namespace Socket.Soccer.WebAPI.Game
             return gameState;
         }
 
-        /// <summary>
-        /// Itt meg kell vizsgálni hogy a Client1, ne férhessen hozzá a Client2 játékosaihoz
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
-        public async Task<Entities.Game> HandleClientCommand(PlayerCommand command)
+        public async Task<Entities.Game?> HandleClientCommand(PlayerCommand command)
         {
             var gameState = await _gameStore.GetOrCreateGame();
+
+            if (!await _clientStore.ArePlayersReadyToGame())
+            {
+                return null;
+            }
 
             var calculatedGameState = CalculateGameState(command, gameState);
 
@@ -128,29 +129,64 @@ namespace Socket.Soccer.WebAPI.Game
 
                     case CommandType.Move:
                         {
-                            var (x, y) = DeterminePosition(player.Position, command.Direction);
-                            player.Position.X = x;
-                            player.Position.Y = y;
+                            var (x, y) = DetermineNewPosition(player.Position, command.Direction, player.StepSize);
+                            (x, y) = ValidateNewPosition(x, y);
+                            if (!game.Pit.IsOccupied(x, y))
+                            {
+                                game.Pit.ClearTile(player.Position);
+                                
+                                player.Position.X = x;
+                                player.Position.Y = y;
+
+                                game.Pit.SetTile(player.Position, player);
+                            }                            
                         }
                         break;
 
-                        // TODO: Passzolás
+                    case CommandType.Trick:
+                        break;
+
+                    case CommandType.Pass:
+                        break;
                 }
             }
 
             return game;
         }
 
-        private static (int x, int y) DeterminePosition(Position position, Direction direction)
+        private static (int x, int y) DetermineNewPosition(Position position, Direction direction, int stepSize)
         {
             return direction switch
             {
-                Direction.North => (position.X, position.Y + position.Direction),
-                Direction.Easth => (position.X + position.Direction, position.Y),
-                Direction.South => (position.X, position.Y + position.Direction),
-                Direction.West => (position.X + position.Direction, position.Y),
-                _ => (5, 0),
+                Direction.North => (position.X, position.Y - stepSize),
+                Direction.Easth => (position.X + stepSize, position.Y),
+                Direction.South => (position.X, position.Y + stepSize),
+                Direction.West => (position.X - stepSize, position.Y),
+                _ => (12, 8),
             };
+        }
+
+        private static (int x, int y) ValidateNewPosition(int x, int y)
+        {
+            var _x = x;
+            var _y = y;
+            if (x < 0)
+            {
+                _x = 0;
+            }
+            if (x > FootballPit.WIDTH)
+            {
+                _x = FootballPit.WIDTH - 1;
+            }
+            if (y < 0)
+            {
+                _y = 0;
+            }
+            if (y > FootballPit.HEIGHT)
+            {
+                _y = FootballPit.HEIGHT - 1;
+            }
+            return (_x, _y);
         }
     }
 }

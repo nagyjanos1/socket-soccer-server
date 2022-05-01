@@ -5,6 +5,8 @@
     /// </summary>
     public class Player
     {
+        
+
         public Guid Id { get; set; }
         public Position Position { get; set; }
         public Team Team { get; set; }
@@ -14,6 +16,15 @@
             {
                 // Ezt lehetne randomizálni
                 return 2;
+            }
+        }
+
+        public int StepSize 
+        {
+            get
+            {
+                // Ezt lehetne randomizálni
+                return 1;
             }
         }
 

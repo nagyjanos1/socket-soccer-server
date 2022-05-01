@@ -39,7 +39,8 @@ namespace Socket.Soccer.WebAPI.Background
                                 game.State.IsGoal,
                                 game.State.IsBallOut,
                                 ball = game.Ball,
-                                players = game.Players
+                                players = game.Players,
+                                isOpponentInitialized = game.Players.Count > 1
                             },
                             cancellationToken: stoppingToken)
                         .ConfigureAwait(false);

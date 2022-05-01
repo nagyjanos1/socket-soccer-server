@@ -49,9 +49,9 @@ namespace Socket.Soccer.WebAPI.Hubs
         /// <returns></returns>
         public async Task HandlePlayerCommand(PlayerCommand command)
         {
-            var gameState = await _gameplay.HandleClientCommand(command);
+            _ = await _gameplay.HandleClientCommand(command);
 
-            await Clients.All.SendAsync(GameHubHelpers.GET_GAMESTATE, gameState);
+            //await Clients.All.SendAsync(GameHubHelpers.GET_GAMESTATE, gameState);
         }       
 
         public async Task ResetServer()

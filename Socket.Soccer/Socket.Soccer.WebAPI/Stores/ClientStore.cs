@@ -62,6 +62,12 @@ namespace Socket.Soccer.WebAPI.Stores
             playerClients.Remove(client);
         }
 
+        public async Task<bool> ArePlayersReadyToGame()
+        {
+            var playerClients = await GetOrCreatePlayersList();
+            return playerClients.Count > 1;
+        }
+
         public async Task AddPlayers(string playerClientId, List<Guid> playerIds)
         {
             var playerClients = await GetOrCreatePlayersList();
@@ -102,6 +108,6 @@ namespace Socket.Soccer.WebAPI.Stores
         public async Task Reset()
         {
             await _cache.RemoveAsync(nameof(List<PlayerClient>));
-        }
+        }        
     }
 }

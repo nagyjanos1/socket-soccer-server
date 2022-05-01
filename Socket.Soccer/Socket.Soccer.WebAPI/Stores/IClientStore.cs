@@ -8,6 +8,7 @@ namespace Socket.Soccer.WebAPI.Stores
         Task Remove(string playerClientId);
         Task<PlayerClient?> Get(string playerClientId);
         Task<bool> Check(string playerClientId, Guid playerId);
+        Task<bool> ArePlayersReadyToGame();
         Task AddPlayers(string connectionId, List<Guid> playerIds);
         Task Reset();
     }

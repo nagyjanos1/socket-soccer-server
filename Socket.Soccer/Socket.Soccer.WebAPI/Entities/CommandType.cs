@@ -15,7 +15,12 @@
         /// <summary>
         /// Passzolás
         /// </summary>
-        Pass
+        Pass,
+
+        /// <summary>
+        /// Cselezi a labdát
+        /// </summary>
+        Trick
     }
 
 }

@@ -15,30 +15,54 @@
     /// </summary>
     public class FootballPit
     {
-        private double WidthOffset => LongSide / 2;
-        private double HeightOffset => ShortSide / 2;
+        public const int WIDTH = 25;
+        public const int HEIGHT = 15;
 
-        public double LongSide { get; }
-        public double ShortSide { get; }
+        private readonly object[,] _tiles = new object[WIDTH, HEIGHT];
 
         public FootballGoal Home { get; }
         public FootballGoal Away { get; }
 
         public FootballPit()
         {
-            LongSide = 20;
-            ShortSide = 10.0;
-
             Home = new FootballGoal().Create(Team.Home);
             Away = new FootballGoal().Create(Team.Away);
+
+            Clear();
+        }
+
+        public void Clear()
+        {
+            for (int i = 0; i < WIDTH; i++)
+            {
+                for (int j = 0; j < HEIGHT; j++)
+                {
+                    _tiles[i, j] = null;
+                }
+            }           
+        }
+
+        public void SetTile(Position position, object anything)
+        {
+            _tiles[position.X, position.Y] = anything;
+        }
+
+        internal bool IsOccupied(int x, int y)
+        {
+            return _tiles[x, y] != null;
+        }
+
+        public void ClearTile(Position position)
+        {
+            _tiles[position.X, position.Y] = null;
         }
 
         public bool IsBallOut(Ball ball)
         {
-            return ball.Position.X + WidthOffset >= LongSide 
-                || ball.Position.X + WidthOffset < 0
-                || ball.Position.Y + HeightOffset >= ShortSide
-                || ball.Position.Y + HeightOffset < 0;
+            return ball.Position.X >= WIDTH 
+                || ball.Position.X < 0
+                || ball.Position.Y >= HEIGHT
+                || ball.Position.Y < 0;
         }
 
         public bool IsGoal(Ball ball, out Team? team)
@@ -59,9 +83,13 @@
             return false;
         }
 
+        
+
         private bool IsGoal(Ball ball, FootballGoal footballGoal) 
-            => ball.Position.X + WidthOffset <= footballGoal.StartPoint.X 
+            => ball.Position.X <= footballGoal.StartPoint.X 
             && ball.Position.Y <= footballGoal.StartPoint.Y 
             && ball.Position.Y >= footballGoal.EndPoint.Y;
+
+        
     }
 }
