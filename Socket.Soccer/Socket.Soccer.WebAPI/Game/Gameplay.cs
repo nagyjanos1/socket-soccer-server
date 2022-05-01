@@ -104,7 +104,16 @@ namespace Socket.Soccer.WebAPI.Game
                             // El tudja rúgni, mert nála a labda
                             if (player.CanKickTheBall(game.Ball))
                             {
-                                game.Ball.SetNewPosition(command.Direction, player.KickStrength);
+                                var (x, y) = CalculateBallPosition(game.Ball, command.Direction, player.KickStrength);
+                                if (!game.Pit.IsOccupied(x, y))
+                                {
+                                    game.Pit.ClearTile(game.Ball.Position);
+
+                                    game.Ball.Position.X = x;
+                                    game.Ball.Position.Y = y;
+
+                                    game.Pit.SetTile(game.Ball.Position, game.Ball);
+                                }
 
                                 if (game.Pit.IsGoal(game.Ball, out var team))
                                 {
@@ -129,8 +138,7 @@ namespace Socket.Soccer.WebAPI.Game
 
                     case CommandType.Move:
                         {
-                            var (x, y) = DetermineNewPosition(player.Position, command.Direction, player.StepSize);
-                            (x, y) = ValidateNewPosition(x, y);
+                            var (x, y) = CalculatePlayerPosition(player, command.Direction, game.Pit);
                             if (!game.Pit.IsOccupied(x, y))
                             {
                                 game.Pit.ClearTile(player.Position);
@@ -139,7 +147,8 @@ namespace Socket.Soccer.WebAPI.Game
                                 player.Position.Y = y;
 
                                 game.Pit.SetTile(player.Position, player);
-                            }                            
+                            }        
+
                         }
                         break;
 
@@ -152,6 +161,41 @@ namespace Socket.Soccer.WebAPI.Game
             }
 
             return game;
+        }
+
+        private static Direction GetRandomDirection()
+        {
+            Random rnd = new();
+            var num = rnd.Next(0, 4);
+            return (Direction)num;
+        }
+
+        private (int x, int y) CalculatePlayerPosition(Player player, Direction direction, FootballPit pit)
+        {
+            var (x, y) = DetermineNewPosition(player.Position, direction, player.StepSize);
+            (x, y) = ValidateNewPosition(x, y);
+
+            if (x == player.Position.X && y == player.Position.Y)
+            {
+                var randomDir = GetRandomDirection();
+                (x, y) = CalculatePlayerPosition(player, randomDir, pit);
+            }
+
+            return (x, y);                                 
+        }
+
+        private (int x, int y) CalculateBallPosition(Ball ball, Direction direction, int kickStrength)
+        {
+            var (x, y) = ball.DetermineNewPosition(ball.Position, direction, kickStrength);
+            (x, y) = ValidateNewPosition(x, y);
+
+            if (x == ball.Position.X && y == ball.Position.Y)
+            {
+                var randomDir = GetRandomDirection();
+                (x, y) = CalculateBallPosition(ball, randomDir, kickStrength);
+            }
+
+            return (x, y);
         }
 
         private static (int x, int y) DetermineNewPosition(Position position, Direction direction, int stepSize)

@@ -32,7 +32,8 @@
         {
             var xDiff = Math.Abs(Position.X - ball.Position.X);
             var yDiff = Math.Abs(Position.Y - ball.Position.Y);
-            return xDiff == 1 && yDiff == 0 || xDiff == 0 && yDiff == 1;
+            //return xDiff == 1 && yDiff == 0 || xDiff == 0 && yDiff == 1;
+            return xDiff == 1 || yDiff == 1;
         }
     }
 

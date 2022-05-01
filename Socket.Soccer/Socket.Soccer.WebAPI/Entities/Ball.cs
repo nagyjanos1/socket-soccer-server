@@ -12,21 +12,7 @@
             Position = new Position(12, 8);
         }
 
-        /// <summary>
-        /// A játékos iránya (merre néz) mondja meg mi lesz a következő helyzete a labdának
-        /// </summary>
-        /// <param name="direction"></param>
-        /// <param name="kickStrength"></param>
-        internal void SetNewPosition(Direction direction, int kickStrength)
-        {
-            var (x, y) = DeterminePosition(Position, direction, kickStrength);
-
-            Position.X = x;
-            Position.Y = y;
-
-        }
-
-        private static (int x, int y) DeterminePosition(Position position, Direction direction, int kickStrength)
+        public (int x, int y) DetermineNewPosition(Position position, Direction direction, int kickStrength)
         {
             return direction switch
             {
@@ -36,6 +22,6 @@
                 Direction.West => (position.X - position.Direction * kickStrength, position.Y),
                 _ => (5, 10),
             };
-        }
+        }       
     }
 }
