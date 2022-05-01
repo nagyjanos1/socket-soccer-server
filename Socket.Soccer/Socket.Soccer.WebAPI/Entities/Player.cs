@@ -17,9 +17,11 @@
             }
         }
 
-        public bool IsBallHere(Ball ball)
+        public bool CanKickTheBall(Ball ball)
         {
-            return ball.Position.X == Position.X && ball.Position.Y == Position.Y;
+            var xDiff = Math.Abs(Position.X - ball.Position.X);
+            var yDiff = Math.Abs(Position.Y - ball.Position.Y);
+            return xDiff == 1 && yDiff == 0 || xDiff == 0 && yDiff == 1;
         }
     }
 

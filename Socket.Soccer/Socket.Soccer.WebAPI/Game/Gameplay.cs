@@ -47,10 +47,12 @@ namespace Socket.Soccer.WebAPI.Game
 
             foreach (var playerId in playerIds)
             {
+                var direction = team?.Team == Team.Home ? 1 : -1;
+                var starPosX = team?.Team == Team.Home ? 1 : -1;
                 gameState.Players.Add(new Player
                 {
                     Id = playerId,
-                    Position = new Position(team?.Team == Team.Home ? 1 : -1, 0, team?.Team == Team.Home ? 1 : -1),
+                    Position = new Position(starPosX, 0, direction),
                     Team = team?.Team ?? Team.Home
                 });
             }
@@ -91,8 +93,6 @@ namespace Socket.Soccer.WebAPI.Game
         /// <returns></returns>
         private Entities.Game CalculateGameState(PlayerCommand command, Entities.Game game)
         {
-
-
             var player = game.Players.FirstOrDefault(x => x.Id == command.PlayerId);
             if (player != null)
             {
@@ -101,7 +101,7 @@ namespace Socket.Soccer.WebAPI.Game
                     case CommandType.Kick:
                         {
                             // El tudja rúgni, mert nála a labda
-                            if (player.IsBallHere(game.Ball))
+                            if (player.CanKickTheBall(game.Ball))
                             {
                                 game.Ball.SetNewPosition(command.Direction, player.KickStrength);
 
