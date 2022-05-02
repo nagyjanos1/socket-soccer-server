@@ -48,7 +48,7 @@ namespace Socket.Soccer.WebAPI.Game
             foreach (var playerId in playerIds)
             {
                 var direction = team?.Team == Team.Home ? 1 : -1;
-                var starPosX = team?.Team == Team.Home ? 12 : 14;
+                var starPosX = team?.Team == Team.Home ? 10 : 14;
                 var starPosY = team?.Team == Team.Home ? 7 :9;
                 gameState.Players.Add(new Player
                 {
@@ -121,7 +121,7 @@ namespace Socket.Soccer.WebAPI.Game
 
                                     if (team == Team.Home)
                                     {
-                                        game.State.HomeScores++;                                        
+                                        game.State.HomeScores++; 
                                     } 
                                     if (team == Team.Away)
                                     {
