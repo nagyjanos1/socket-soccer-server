@@ -18,7 +18,7 @@
         public const int WIDTH = 25;
         public const int HEIGHT = 15;
 
-        private readonly object[,] _tiles = new object[WIDTH, HEIGHT];
+        private readonly object?[,] _tiles = new object[WIDTH, HEIGHT];
 
         public FootballGoal Home { get; }
         public FootballGoal Away { get; }
@@ -59,9 +59,9 @@
 
         public bool IsBallOut(Ball ball)
         {
-            return ball.Position.X >= WIDTH 
+            return ball.Position.X >= WIDTH - 1 
                 || ball.Position.X < 0
-                || ball.Position.Y >= HEIGHT
+                || ball.Position.Y >= HEIGHT - 1
                 || ball.Position.Y < 0;
         }
 
@@ -84,11 +84,11 @@
         }
 
         
-
+    
         private bool IsGoal(Ball ball, FootballGoal footballGoal) 
-            => ball.Position.X <= footballGoal.StartPoint.X 
-            && ball.Position.Y <= footballGoal.StartPoint.Y 
-            && ball.Position.Y >= footballGoal.EndPoint.Y;
+            => ball.Position.X == footballGoal.StartPoint.X 
+            && ball.Position.Y >= footballGoal.StartPoint.Y 
+            && ball.Position.Y <= footballGoal.EndPoint.Y;
 
         
     }

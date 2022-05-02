@@ -5,11 +5,12 @@
         /// <summary>
         /// Labda pozíciója
         /// </summary>
+        public readonly Position BALL_START_POSITION = new Position(12, 8);
         public Position Position { get; set; }
 
         public Ball()
         {
-            Position = new Position(12, 8);
+            Position = new Position(BALL_START_POSITION.X, BALL_START_POSITION.Y);
         }
 
         public (int x, int y) DetermineNewPosition(Position position, Direction direction, int kickStrength)

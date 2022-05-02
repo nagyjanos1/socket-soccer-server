@@ -10,17 +10,9 @@
         public FootballGoal Create(Team teamType)
         {
             var footballGoal = this;
-            if (teamType == Team.Home)
-            {
-                StartPoint = new Position(0, 5);
-                EndPoint = new Position(0, 9);
-
-                return footballGoal;
-            }
-
-            StartPoint = new Position(25, 5);
-            EndPoint = new Position(25, 9);
-
+            var x = teamType == Team.Home ? 0 : FootballPit.WIDTH - 1;
+            StartPoint = new Position(x, 5);
+            EndPoint = new Position(x, 9);
             return footballGoal;
         }
     }

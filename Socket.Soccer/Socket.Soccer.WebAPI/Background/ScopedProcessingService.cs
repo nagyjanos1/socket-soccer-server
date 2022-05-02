@@ -25,11 +25,6 @@ namespace Socket.Soccer.WebAPI.Background
                 {
                     var game = await _gameStore.GetOrCreateGame();
 
-                    if (game.State.IsGoal != null || game.State.IsBallOut)
-                    {
-                        game.ResetState();
-                    }
-
                     await _hubContext.Clients.All.SendAsync(
                             GameHubHelpers.GET_GAMESTATE,
                             new
@@ -46,6 +41,11 @@ namespace Socket.Soccer.WebAPI.Background
                         .ConfigureAwait(false);
 
                     _logger.LogInformation("Sent a gamestate message to all.");
+
+                    if (game.State.IsGoal != null || game.State.IsBallOut)
+                    {
+                        game.ResetState();
+                    }
 
                     await Task.Delay(1000, stoppingToken);
                 }
