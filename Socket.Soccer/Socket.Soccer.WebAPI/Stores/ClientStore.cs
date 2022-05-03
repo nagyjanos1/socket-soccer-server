@@ -18,9 +18,9 @@ namespace Socket.Soccer.WebAPI.Stores
             var playerClients = await GetOrCreatePlayersList();
 
             if (playerClients.Count >= 2)
-                throw new Exception("Nem léphetbe több játékos!");
+                throw new Exception("Maximum Number of Players Reached");
             if (playerClients.Any(x => x.ClientId == playerClientId))
-                throw new Exception("Ezzel az azonosítóval már regisztrált egy játékos.");
+                throw new Exception("This ID is already used");
             var client = new PlayerClient
             {
                 ClientId = playerClientId,
