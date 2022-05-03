@@ -6,7 +6,8 @@
     public class Player
     {
         
-
+        public static readonly Position HOME_START_POSITION = new Position(10, 7, 1);
+        public static readonly Position AWAY_START_POSITION = new Position(14, 9, -1);
         public Guid Id { get; set; }
         public Position Position { get; set; }
         public Team Team { get; set; }

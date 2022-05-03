@@ -47,13 +47,10 @@ namespace Socket.Soccer.WebAPI.Game
 
             foreach (var playerId in playerIds)
             {
-                var direction = team?.Team == Team.Home ? 1 : -1;
-                var starPosX = team?.Team == Team.Home ? 10 : 14;
-                var starPosY = team?.Team == Team.Home ? 7 :9;
                 gameState.Players.Add(new Player
                 {
                     Id = playerId,
-                    Position = new Position(starPosX, starPosY, direction),
+                    Position = team?.Team == Team.Home ? Player.HOME_START_POSITION : Player.AWAY_START_POSITION,
                     Team = team?.Team ?? Team.Home
                 });
             }
