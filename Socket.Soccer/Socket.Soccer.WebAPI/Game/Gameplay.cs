@@ -167,11 +167,11 @@ namespace Socket.Soccer.WebAPI.Game
             var (x, y) = DetermineNewPosition(player.Position, direction, player.StepSize);
             (x, y) = ValidateNewPosition(x, y);
 
-            if (x == player.Position.X && y == player.Position.Y)
+            /*if (x == player.Position.X && y == player.Position.Y)
             {
                 var randomDir = GetRandomDirection();
                 (x, y) = CalculatePlayerPosition(player, randomDir, pit);
-            }
+            }*/
 
             return (x, y);                                 
         }
