@@ -51,7 +51,7 @@ namespace Socket.Soccer.WebAPI.Background
                         _logger.LogInformation("State was reseted.");
                     }
 
-                    await Task.Delay(1000, stoppingToken);
+                    await Task.Delay(500, stoppingToken);
                 }
                 catch (Exception ex)
                 {

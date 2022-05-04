@@ -7,10 +7,12 @@ namespace Socket.Soccer.WebAPI.Hubs
     public class GameHub : Hub
     {
         private readonly IGameplay _gameplay;
+        private readonly ILogger<GameHub> _logger;
 
-        public GameHub(IGameplay gameplay)
+        public GameHub(IGameplay gameplay, ILogger<GameHub> logger)
         {
             _gameplay = gameplay;
+            _logger = logger;
         }
 
         public override async Task OnConnectedAsync()
@@ -30,11 +32,6 @@ namespace Socket.Soccer.WebAPI.Hubs
 
         public Task ThrowException() => throw new HubException("This error will be sent to the client.");
 
-        /// <summary>
-        /// Csatalkozás után regisztráljuk a játékosokat
-        /// </summary>
-        /// <param name="playerIds"></param>
-        /// <returns></returns>
         public async Task InitPlayers(List<Guid> playerIds)
         {
             await _gameplay.InitPlayers(Context.ConnectionId, playerIds);
@@ -42,16 +39,16 @@ namespace Socket.Soccer.WebAPI.Hubs
             await Clients.Caller.SendAsync(GameHubHelpers.PLAYERS_INITED, "Players of the client were added.");
         }
 
-        /// <summary>
-        /// Itt meg kell vizsgálni hogy a Client1, ne férhessen hozzá a Client2 játékosaihoz
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
         public async Task HandlePlayerCommand(PlayerCommand command)
         {
-            _ = await _gameplay.HandleClientCommand(command);
-
-            //await Clients.All.SendAsync(GameHubHelpers.GET_GAMESTATE, gameState);
+            try
+            {
+                _ = await _gameplay.HandleClientCommand(command);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
         }       
 
         public async Task ResetServer()

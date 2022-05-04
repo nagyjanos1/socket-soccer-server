@@ -82,11 +82,10 @@
             team = null;
             return false;
         }
-
-        
+               
     
         private bool IsGoal(Ball ball, FootballGoal footballGoal) 
-            => ball.Position.X == footballGoal.StartPoint.X 
+            => ball.Position.X == footballGoal.StartPoint.X
             && ball.Position.Y >= footballGoal.StartPoint.Y 
             && ball.Position.Y <= footballGoal.EndPoint.Y;
 

@@ -84,12 +84,6 @@ namespace Socket.Soccer.WebAPI.Game
             await _gameStore.SaveGame(gameState);
         }
 
-        /// <summary>
-        /// Kiszámoljuk, hol a labda és hol a játékos
-        /// </summary>
-        /// <param name="command"></param>
-        /// <param name="game"></param>
-        /// <returns></returns>
         private Entities.Game CalculateGameState(PlayerCommand command, Entities.Game game)
         {
             var player = game.Players.FirstOrDefault(x => x.Id == command.PlayerId);
@@ -216,7 +210,7 @@ namespace Socket.Soccer.WebAPI.Game
             {
                 _x = 0;
             }
-            if (x > FootballPit.WIDTH)
+            if (x >= FootballPit.WIDTH)
             {
                 _x = FootballPit.WIDTH - 1;
             }
@@ -224,7 +218,7 @@ namespace Socket.Soccer.WebAPI.Game
             {
                 _y = 0;
             }
-            if (y > FootballPit.HEIGHT)
+            if (y >= FootballPit.HEIGHT)
             {
                 _y = FootballPit.HEIGHT - 1;
             }
