@@ -45,6 +45,10 @@ namespace Socket.Soccer.WebAPI.Background
                     if (game.State.IsGoal != null || game.State.IsBallOut)
                     {
                         game.ResetState();
+
+                        await _gameStore.SaveGame(game);
+
+                        _logger.LogInformation("State was reseted.");
                     }
 
                     await Task.Delay(1000, stoppingToken);

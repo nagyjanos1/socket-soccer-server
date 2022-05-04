@@ -13,9 +13,9 @@
 
         public void ResetState()
         {
-            this.State.IsGoal = null;
-            this.State.IsBallOut = false;
-            this.Ball.Position = this.Ball.BALL_START_POSITION;
+            State.IsGoal = null;
+            State.IsBallOut = false;
+            Ball.Position = Ball.BALL_START_POSITION;
             foreach (var player in this.Players)
             {
                 player.Position = player.Team == Team.Home ? Player.HOME_START_POSITION : Player.AWAY_START_POSITION;

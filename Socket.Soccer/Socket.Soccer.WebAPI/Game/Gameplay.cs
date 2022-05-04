@@ -30,8 +30,9 @@ namespace Socket.Soccer.WebAPI.Game
 
         public async Task ResetGameplay()
         {
-            await _clientStore.Reset();
-            await _gameStore.ResetGame();
+            var game = await _gameStore.GetOrCreateGame();
+            game.ResetState();
+            await _gameStore.SaveGame(game);
         }
 
         public async Task<Entities.Game> InitPlayers(string clientId, List<Guid> playerIds)
@@ -62,19 +63,19 @@ namespace Socket.Soccer.WebAPI.Game
 
         public async Task<Entities.Game?> HandleClientCommand(PlayerCommand command)
         {
-            var gameState = await _gameStore.GetOrCreateGame();
+            var game = await _gameStore.GetOrCreateGame();
 
             if (!await _clientStore.ArePlayersReadyToGame())
             {
                 return null;
             }
 
-            var calculatedGameState = CalculateGameState(command, gameState);
+            var calculatedGameState = CalculateGameState(command, game);
 
             // Elmentjük az állást
             await _gameStore.SaveGame(calculatedGameState);
 
-            return gameState;
+            return game;
         }
 
         private async Task InitGameState()
